@@ -1,0 +1,535 @@
+/* Variables et reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --deep-blue: #0A1A4A;
+    --indigo: #3A2DCE;
+    --violet: #7B54F7;
+    --white: #FFFFFF;
+    --black: #000000;
+    --cyan: #00D4FF;
+    --magenta: #FF00FF;
+    --bg-gradient: linear-gradient(135deg, #0A1A4A 0%, #1a2a6c 50%, #3A2DCE 100%);
+}
+
+html, body {
+    height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--white);
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Canvas des étoiles */
+#starsCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: var(--deep-blue);
+}
+
+/* Conteneur principal */
+.countdown-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+}
+
+/* Logo */
+.countdown-logo {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: pulse 4s ease-in-out infinite;
+}
+
+.planet-core {
+    filter: drop-shadow(0 0 30px rgba(123, 84, 247, 0.5));
+}
+
+.planet-ring {
+    filter: drop-shadow(0 0 20px rgba(58, 45, 206, 0.4));
+}
+
+.logo-text {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-top: 1rem;
+    background: linear-gradient(135deg, var(--white) 0%, var(--cyan) 50%, var(--violet) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+/* Message de lancement */
+.launch-message {
+    text-align: center;
+    margin-bottom: 4rem;
+    max-width: 800px;
+}
+
+.launch-message h2 {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--white) 0%, var(--cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.launch-message p {
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 300;
+}
+
+/* Compte à rebours */
+.countdown {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    padding: 3rem;
+    margin-bottom: 3rem;
+    width: 100%;
+    max-width: 900px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.countdown h3 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    color: var(--white);
+    font-weight: 500;
+}
+
+.countdown-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.countdown-item {
+    text-align: center;
+    min-width: 120px;
+}
+
+.countdown-number {
+    font-size: 4.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--cyan) 0%, var(--violet) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 20px rgba(123, 84, 247, 0.3);
+    position: relative;
+    padding: 0.5rem;
+}
+
+.countdown-number::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    border-radius: 3px;
+}
+
+.countdown-label {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 500;
+}
+
+.countdown-separator {
+    font-size: 3rem;
+    color: var(--cyan);
+    font-weight: 300;
+    margin: 0 0.5rem;
+    animation: blink 2s infinite;
+}
+
+/* Date de lancement */
+.launch-date {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    font-size: 1.3rem;
+    color: var(--cyan);
+    background: rgba(0, 212, 255, 0.1);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.launch-date i {
+    font-size: 1.5rem;
+    animation: rocket 3s ease-in-out infinite;
+}
+
+/* Description */
+.description {
+    max-width: 800px;
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.description p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 2rem;
+}
+
+.features {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 15px;
+    min-width: 150px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.feature:hover {
+    transform: translateY(-5px);
+    border-color: var(--violet);
+    background: rgba(123, 84, 247, 0.1);
+}
+
+.feature i {
+    font-size: 2rem;
+    color: var(--cyan);
+    margin-bottom: 0.5rem;
+}
+
+.feature span {
+    color: var(--white);
+    font-weight: 500;
+}
+
+/* Newsletter */
+.newsletter {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-bottom: 3rem;
+    width: 100%;
+    max-width: 700px;
+}
+
+.newsletter h3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--white);
+}
+
+.newsletter h3 i {
+    color: var(--cyan);
+}
+
+.newsletter > p {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-group input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    color: var(--white);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--cyan);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.form-group button {
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, var(--cyan) 0%, var(--violet) 100%);
+    border: none;
+    border-radius: 50px;
+    color: var(--white);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-group button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(123, 84, 247, 0.4);
+}
+
+.form-note {
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Réseaux sociaux */
+.social-links {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.social-links p {
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.social-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    color: var(--white);
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.social-icon:hover {
+    background: linear-gradient(135deg, var(--cyan) 0%, var(--violet) 100%);
+    transform: translateY(-5px) rotate(10deg);
+}
+
+/* Footer */
+.countdown-footer {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+    max-width: 800px;
+}
+
+.countdown-footer p {
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Confetti container */
+#confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Animations */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.3;
+    }
+}
+
+@keyframes rocket {
+    0%, 100% {
+        transform: translateY(0) rotate(0);
+    }
+    25% {
+        transform: translateY(-5px) rotate(-5deg);
+    }
+    75% {
+        transform: translateY(5px) rotate(5deg);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .countdown-container {
+        padding: 1.5rem;
+    }
+    
+    .logo-text {
+        font-size: 2.5rem;
+    }
+    
+    .launch-message h2 {
+        font-size: 2rem;
+    }
+    
+    .launch-message p {
+        font-size: 1.1rem;
+    }
+    
+    .countdown {
+        padding: 2rem 1.5rem;
+    }
+    
+    .countdown-number {
+        font-size: 3.5rem;
+    }
+    
+    .countdown-item {
+        min-width: 90px;
+    }
+    
+    .countdown-separator {
+        font-size: 2.5rem;
+    }
+    
+    .form-group {
+        flex-direction: column;
+    }
+    
+    .form-group button {
+        justify-content: center;
+    }
+    
+    .features {
+        gap: 1rem;
+    }
+    
+    .feature {
+        min-width: 120px;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .countdown-container {
+        padding: 1rem;
+    }
+    
+    .logo-text {
+        font-size: 2rem;
+    }
+    
+    .launch-message h2 {
+        font-size: 1.7rem;
+    }
+    
+    .countdown-grid {
+        gap: 1rem;
+    }
+    
+    .countdown-number {
+        font-size: 2.8rem;
+    }
+    
+    .countdown-item {
+        min-width: 70px;
+    }
+    
+    .countdown-label {
+        font-size: 0.8rem;
+    }
+    
+    .countdown-separator {
+        font-size: 2rem;
+    }
+    
+    .launch-date {
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+    }
+    
+    .description p {
+        font-size: 1rem;
+    }
+    
+    .social-icons {
+        gap: 1rem;
+    }
+    
+    .social-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+}
