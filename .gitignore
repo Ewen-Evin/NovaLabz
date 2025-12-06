@@ -24,6 +24,10 @@
 !public/php/load_env.php
 !public/php/send_contact.php
 !public/index.php
+!index.php
+!public/img/
+!public/img/favicon.svg
+
 
 # Ignorer tous les autres fichiers dans ces dossiers
 app/views/*

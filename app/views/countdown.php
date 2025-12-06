@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $title ?? 'Novalabz - Bientôt disponible'; ?></title>
     <link rel="stylesheet" href="<?php echo $base; ?>css/countdown.css">
+
+    <!-- Favicon emoji planète -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%237B54F7%22>🪐</text></svg>">
+    <!-- Version alternative avec une vraie planète SVG -->
+    <link rel="alternate icon" href="<?php echo $base; ?>img/favicon.svg" type="image/x-icon">
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
