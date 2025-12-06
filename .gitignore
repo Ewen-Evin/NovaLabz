@@ -1,0 +1,42 @@
+# Ignorer TOUT sauf les fichiers spécifiés ci-dessous
+*
+!.gitignore
+
+# Fichiers autorisés (ne PAS ignorer)
+!README.md
+!.htaccess
+!app/
+!app/controllers/
+!app/controllers/HomeController.php
+!app/views/
+!app/views/countdown.php
+!app/views/404.php
+!app/core/
+!app/core/Router.php
+!public/
+!public/css/
+!public/css/countdown.css
+!public/js/
+!public/js/countdown.js
+!public/js/countdown-form.js
+!public/php/
+!public/php/load_env.php
+!public/php/send_contact.php
+!public/index.php
+
+# Ignorer tous les autres fichiers dans ces dossiers
+app/views/*
+!app/views/countdown.php
+!app/views/404.php 
+app/views/partials/
+public/css/*
+!public/css/countdown.css
+public/js/*
+!public/js/countdown.js
+!public/js/countdown-form.js
+public/php/*
+!public/php/load_env.php
+!public/php/send_contact.php
+
+# Fichiers spécifiques à ignorer ABSOLUMENT
+.env

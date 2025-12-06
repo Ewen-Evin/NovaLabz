@@ -6,14 +6,16 @@
 }
 
 :root {
-    --deep-blue: #0A1A4A;
+    --deep-blue: #0A0A15;
+    --dark-blue: #0A1A4A;
     --indigo: #3A2DCE;
     --violet: #7B54F7;
     --white: #FFFFFF;
     --black: #000000;
     --cyan: #00D4FF;
     --magenta: #FF00FF;
-    --bg-gradient: linear-gradient(135deg, #0A1A4A 0%, #1a2a6c 50%, #3A2DCE 100%);
+    --neon-green: #00FF41;
+    --bg-gradient: linear-gradient(135deg, #0A0A15 0%, #0A1A4A 50%, #1a1a2e 100%);
 }
 
 html, body {
@@ -29,7 +31,7 @@ body {
     position: relative;
 }
 
-/* Canvas des étoiles */
+/* Canvas des étoiles - Plus foncé */
 #starsCanvas {
     position: fixed;
     top: 0;
@@ -54,19 +56,51 @@ body {
     z-index: 1;
 }
 
-/* Logo */
+/* Logo avec effets spéciaux */
 .countdown-logo {
     text-align: center;
     margin-bottom: 3rem;
-    animation: pulse 4s ease-in-out infinite;
+    position: relative;
+}
+
+.logo-frame {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
+/* Lueur derrière le logo */
+.logo-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(0, 212, 255, 0.2) 0%, rgba(123, 84, 247, 0.1) 40%, transparent 70%);
+    border-radius: 50%;
+    z-index: -1;
+    filter: blur(20px);
+    animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* Particules orbitales autour du logo */
+.orbital-particles {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: 250px;
+    z-index: -1;
 }
 
 .planet-core {
-    filter: drop-shadow(0 0 30px rgba(123, 84, 247, 0.5));
+    filter: drop-shadow(0 0 30px rgba(123, 84, 247, 0.7));
 }
 
 .planet-ring {
-    filter: drop-shadow(0 0 20px rgba(58, 45, 206, 0.4));
+    filter: drop-shadow(0 0 20px rgba(58, 45, 206, 0.6));
 }
 
 .logo-text {
@@ -79,6 +113,8 @@ body {
     background-clip: text;
     letter-spacing: 3px;
     text-transform: uppercase;
+    position: relative;
+    z-index: 2;
 }
 
 /* Message de lancement */
@@ -95,6 +131,7 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
 }
 
 .launch-message p {
@@ -103,17 +140,91 @@ body {
     font-weight: 300;
 }
 
+.rocket-emoji {
+    background: linear-gradient(135deg, var(--white) 0%, var(--cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    font-size: inherit;
+    display: inline-block;
+    user-select: none; /* Empêche la sélection */
+    margin-right: 10px;
+}
+
+/* Alternative : permettre la sélection mais garder le style */
+.rocket-emoji::selection {
+    -webkit-text-fill-color: transparent !important;
+    background: linear-gradient(135deg, var(--white) 0%, var(--cyan) 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+}
+
 /* Compte à rebours */
 .countdown {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(26, 26, 46, 0.6);
     backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(123, 84, 247, 0.3);
     border-radius: 25px;
     padding: 3rem;
     margin-bottom: 3rem;
     width: 100%;
     max-width: 900px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animation qui fait le tour du carré countdown */
+.countdown::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 25px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    background-size: 400% 400%;
+    z-index: 1;
+    animation: border-scan 10s linear infinite;
+    pointer-events: none;
+}
+
+.countdown::after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    right: 1px;
+    bottom: 1px;
+    background: rgba(26, 26, 46, 0.6);
+    border-radius: 24px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+@keyframes border-scan {
+    0% {
+        background-position: 0% 0%;
+        opacity: 0.5;
+    }
+    25% {
+        background-position: 100% 0%;
+        opacity: 0.8;
+    }
+    50% {
+        background-position: 100% 100%;
+        opacity: 0.5;
+    }
+    75% {
+        background-position: 0% 100%;
+        opacity: 0.8;
+    }
+    100% {
+        background-position: 0% 0%;
+        opacity: 0.5;
+    }
 }
 
 .countdown h3 {
@@ -122,6 +233,8 @@ body {
     margin-bottom: 2rem;
     color: var(--white);
     font-weight: 500;
+    position: relative;
+    z-index: 2;
 }
 
 .countdown-grid {
@@ -129,12 +242,28 @@ body {
     justify-content: center;
     align-items: center;
     gap: 1.5rem;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    position: relative;
+    z-index: 2;
 }
 
 .countdown-item {
     text-align: center;
     min-width: 120px;
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(123, 84, 247, 0.2);
+    border-radius: 15px;
+    padding: 1.5rem 1rem;
+    position: relative;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    flex-basis: auto;
+}
+
+.countdown-item:hover {
+    background: rgba(0, 212, 255, 0.1);
+    border-color: rgba(123, 84, 247, 0.4);
+    transform: translateY(-5px);
 }
 
 .countdown-number {
@@ -149,18 +278,38 @@ body {
     text-shadow: 0 0 20px rgba(123, 84, 247, 0.3);
     position: relative;
     padding: 0.5rem;
+    transition: all 0.2s ease;
+    display: block;
+    white-space: nowrap;
+    overflow: visible;
 }
 
-.countdown-number::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-    border-radius: 3px;
+/* Nouvelle animation plus subtile et élégante */
+@keyframes numberChange {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+        filter: blur(0px);
+    }
+    20% {
+        transform: translateY(-20px) scale(1.05);
+        opacity: 0;
+        filter: blur(2px);
+    }
+    40% {
+        transform: translateY(20px) scale(0.95);
+        opacity: 0;
+        filter: blur(2px);
+    }
+    60% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+        filter: blur(0px);
+    }
+}
+
+.countdown-number.changing {
+    animation: numberChange 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .countdown-label {
@@ -169,6 +318,8 @@ body {
     text-transform: uppercase;
     letter-spacing: 2px;
     font-weight: 500;
+    display: block;
+    white-space: nowrap;
 }
 
 .countdown-separator {
@@ -177,6 +328,11 @@ body {
     font-weight: 300;
     margin: 0 0.5rem;
     animation: blink 2s infinite;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    display: flex;
+    align-items: center;
+    height: 100%;
+    flex-shrink: 0;
 }
 
 /* Date de lancement */
@@ -192,6 +348,7 @@ body {
     padding: 1rem 2rem;
     border-radius: 50px;
     border: 1px solid rgba(0, 212, 255, 0.3);
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
 }
 
 .launch-date i {
@@ -199,141 +356,263 @@ body {
     animation: rocket 3s ease-in-out infinite;
 }
 
-/* Description */
-.description {
-    max-width: 800px;
+/* Services */
+.services {
+    max-width: 1000px;
     text-align: center;
     margin-bottom: 4rem;
+    background: rgba(26, 26, 46, 0.6);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(123, 84, 247, 0.3);
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 100%;
 }
 
-.description p {
-    font-size: 1.2rem;
-    line-height: 1.8;
-    color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 2rem;
-}
-
-.features {
+.services h3 {
     display: flex;
+    align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: var(--white);
+}
+
+.services h3 i {
+    color: var(--cyan);
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.services > p {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 2.5rem;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.service-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
 }
 
-.feature {
+.service-item {
+    background: rgba(10, 10, 21, 0.8);
+    border: 1px solid rgba(123, 84, 247, 0.2);
+    border-radius: 15px;
+    padding: 2rem 1.5rem;
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 1.5rem;
-    border-radius: 15px;
-    min-width: 150px;
-    transition: all 0.3s ease;
-    border: 1px solid transparent;
+    text-align: center;
 }
 
-.feature:hover {
+.service-item:hover {
     transform: translateY(-5px);
-    border-color: var(--violet);
-    background: rgba(123, 84, 247, 0.1);
+    border-color: var(--cyan);
+    background: rgba(0, 212, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
 }
 
-.feature i {
-    font-size: 2rem;
+.service-icon {
+    width: 70px;
+    height: 70px;
+    background: rgba(0, 212, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
     color: var(--cyan);
-    margin-bottom: 0.5rem;
+    font-size: 2rem;
+    border: 2px solid var(--cyan);
 }
 
-.feature span {
+.service-item h4 {
+    font-size: 1.3rem;
     color: var(--white);
-    font-weight: 500;
+    margin-bottom: 1rem;
+    font-weight: 600;
 }
 
-/* Newsletter */
-.newsletter {
-    background: rgba(255, 255, 255, 0.05);
+.service-item p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Formulaire de contact clients */
+.client-contact {
+    background: rgba(26, 26, 46, 0.6);
     backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(123, 84, 247, 0.3);
     border-radius: 20px;
     padding: 2.5rem;
     margin-bottom: 3rem;
     width: 100%;
-    max-width: 700px;
+    max-width: 900px;
 }
 
-.newsletter h3 {
+.client-contact h3 {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     margin-bottom: 1rem;
     color: var(--white);
+    text-align: center;
 }
 
-.newsletter h3 i {
+.client-contact h3 i {
     color: var(--cyan);
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
 }
 
-.newsletter > p {
+.client-contact > p {
     text-align: center;
     color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+#client-form {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .form-group {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
-.form-group input {
-    flex: 1;
-    padding: 1rem 1.5rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50px;
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--cyan);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.form-group label i {
+    font-size: 1rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 1rem 1.2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(123, 84, 247, 0.3);
+    border-radius: 10px;
     color: var(--white);
+    font-family: 'Inter', sans-serif;
     font-size: 1rem;
     transition: all 0.3s ease;
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
     outline: none;
     border-color: var(--cyan);
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.1);
     box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
 }
 
-.form-group input::placeholder {
+.form-group input::placeholder,
+.form-group textarea::placeholder {
     color: rgba(255, 255, 255, 0.5);
 }
 
-.form-group button {
-    padding: 1rem 2rem;
-    background: linear-gradient(135deg, var(--cyan) 0%, var(--violet) 100%);
-    border: none;
-    border-radius: 50px;
-    color: var(--white);
-    font-weight: 600;
+.form-group select {
     cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2300D4FF' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1.2rem center;
+    background-size: 16px;
+    padding-right: 3rem;
 }
 
-.form-group button:hover {
+.form-group select option {
+    background: var(--dark-blue);
+    color: var(--white);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 1.2rem 2rem;
+    background: linear-gradient(135deg, var(--cyan) 0%, var(--violet) 100%);
+    border: none;
+    border-radius: 10px;
+    color: var(--white);
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    margin-top: 2rem;
+}
+
+.submit-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 30px rgba(123, 84, 247, 0.4);
+    background: linear-gradient(135deg, var(--violet) 0%, var(--cyan) 100%);
 }
 
 .form-note {
     text-align: center;
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.5);
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    line-height: 1.5;
+}
+
+/* Messages du formulaire */
+.form-message {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+    background: rgba(0, 255, 65, 0.1);
+    color: #00FF41;
+    border: 1px solid rgba(0, 255, 65, 0.3);
+    text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+
+.form-message.error {
+    background: rgba(255, 0, 68, 0.1);
+    color: #FF0044;
+    border: 1px solid rgba(255, 0, 68, 0.3);
+    text-shadow: 0 0 10px rgba(255, 0, 68, 0.5);
 }
 
 /* Réseaux sociaux */
@@ -359,24 +638,27 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(26, 26, 46, 0.6);
     border-radius: 50%;
     color: var(--white);
     font-size: 1.3rem;
     transition: all 0.3s ease;
     text-decoration: none;
+    border: 1px solid rgba(123, 84, 247, 0.3);
 }
 
 .social-icon:hover {
     background: linear-gradient(135deg, var(--cyan) 0%, var(--violet) 100%);
     transform: translateY(-5px) rotate(10deg);
+    border-color: transparent;
+    box-shadow: 0 10px 20px rgba(123, 84, 247, 0.4);
 }
 
 /* Footer */
 .countdown-footer {
     text-align: center;
     padding-top: 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(123, 84, 247, 0.2);
     width: 100%;
     max-width: 800px;
 }
@@ -396,6 +678,17 @@ body {
     height: 100%;
     pointer-events: none;
     z-index: 2;
+}
+
+/* Particules flottantes */
+#floating-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
 }
 
 /* Animations */
@@ -429,6 +722,17 @@ body {
     }
 }
 
+@keyframes glow-pulse {
+    0%, 100% {
+        opacity: 0.5;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .countdown-container {
@@ -451,33 +755,47 @@ body {
         padding: 2rem 1.5rem;
     }
     
+    .countdown-grid {
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+    
     .countdown-number {
         font-size: 3.5rem;
     }
     
     .countdown-item {
-        min-width: 90px;
+        min-width: calc(50% - 2rem);
+        margin-bottom: 1rem;
     }
     
     .countdown-separator {
-        font-size: 2.5rem;
+        display: none;
     }
     
-    .form-group {
-        flex-direction: column;
+    /* Affiche les labels de temps sur mobile */
+    .countdown-item::after {
+        content: attr(data-label);
+        display: block;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.7);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 0.5rem;
+        font-weight: 500;
     }
     
-    .form-group button {
-        justify-content: center;
+    .service-list {
+        grid-template-columns: 1fr;
     }
     
-    .features {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .social-icons {
         gap: 1rem;
-    }
-    
-    .feature {
-        min-width: 120px;
-        padding: 1rem;
     }
 }
 
@@ -503,7 +821,8 @@ body {
     }
     
     .countdown-item {
-        min-width: 70px;
+        min-width: calc(50% - 1rem);
+        padding: 1rem 0.5rem;
     }
     
     .countdown-label {
@@ -519,12 +838,20 @@ body {
         padding: 0.8rem 1.5rem;
     }
     
-    .description p {
-        font-size: 1rem;
+    .services,
+    .client-contact {
+        padding: 1.5rem 1rem;
     }
     
-    .social-icons {
-        gap: 1rem;
+    .services h3,
+    .client-contact h3 {
+        font-size: 1.5rem;
+    }
+    
+    .service-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.7rem;
     }
     
     .social-icon {
