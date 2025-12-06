@@ -1,14 +1,6 @@
 RewriteEngine On
 RewriteBase /
 
-# Rediriger HTTP vers HTTPS
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
-
-# Rediriger www vers non-www
-RewriteCond %{HTTP_HOST} ^www\.novalabz\.fr [NC]
-RewriteRule ^(.*)$ https://novalabz.fr/$1 [R=301,L]
-
 # Protection des fichiers sensibles
 <FilesMatch "^\.">
     Order allow,deny
