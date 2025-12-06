@@ -5,6 +5,7 @@
 # Fichiers autorisés (ne PAS ignorer)
 !README.md
 !.htaccess
+!index.php
 !app/
 !app/controllers/
 !app/controllers/HomeController.php
