@@ -1,9 +1,10 @@
 <?php
-// Chargement des variables d'environnement
-if ($_SERVER['HTTP_HOST'] === 'localhost' || strpos($_SERVER['HTTP_HOST'], '.local') !== false) {
-    define('BASE', '/NovaLabz/'); // Local (racine du projet)
+// Chargement des variables d'environnement (BASE dynamique, indépendant du nom du dossier)
+$scriptDir = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
+if ($scriptDir === '' || $scriptDir === '.') {
+    define('BASE', '/');
 } else {
-    define('BASE', '/'); // Production
+    define('BASE', $scriptDir . '/');
 }
 
 // Front Controller - Point d'entrée unique

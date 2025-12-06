@@ -36,7 +36,8 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append('form_type', 'countdown_partner');
             
             // Envoi des données via fetch
-            fetch('/NovaLabz/src/php/send_contact.php', {
+            const assetsBase = (window.ASSETS_BASE !== undefined) ? window.ASSETS_BASE : '/public/';
+            fetch(assetsBase + 'php/send_contact.php', {
                 method: 'POST',
                 body: formData
             })

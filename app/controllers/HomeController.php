@@ -9,8 +9,7 @@ class HomeController {
         
         $data = [
             'title' => 'Novalabz - Exploring the Future of Web Creation',
-            'description' => 'Création de sites web innovants et solutions numériques premium',
-            'base' => BASE
+            'description' => 'Création de sites web innovants et solutions numériques premium'
         ];
         $this->render('home', $data);
     }
@@ -22,8 +21,7 @@ class HomeController {
         }
         
         $data = [
-            'title' => 'Services - Novalabz',
-            'base' => BASE
+            'title' => 'Services - Novalabz'
         ];
         $this->render('services', $data);
     }
@@ -35,8 +33,7 @@ class HomeController {
         }
         
         $data = [
-            'title' => 'Projets - Novalabz',
-            'base' => BASE
+            'title' => 'Projets - Novalabz'
         ];
         $this->render('projects', $data);
     }
@@ -48,21 +45,18 @@ class HomeController {
         }
         
         $data = [
-            'title' => 'Contact - Novalabz',
-            'base' => BASE
+            'title' => 'Contact - Novalabz'
         ];
         $this->render('contact', $data);
     }
     
     public function countdown() {
         $data = [
-            'title' => 'Novalabz - Bientôt disponible',
-            'base' => BASE
+            'title' => 'Novalabz - Bientôt disponible'
         ];
         
-        // Toujours accessible
-        require_once '../app/views/countdown.php';
-        exit;
+        // Toujours accessible via render() pour injecter les bases correctement
+        $this->render('countdown', $data);
     }
     
     private function isLaunched() {
@@ -72,12 +66,18 @@ class HomeController {
     }
     
     private function render($view, $data = []) {
+        // Préparer des variables utiles pour les vues :
+        // - route_base : base pour la génération d'URLs côté routing (ex: '/mondossier/')
+        // - base (assets) : base pour les assets (ex: '/mondossier/public/')
+        $data['route_base'] = BASE;
+        $data['base'] = rtrim(BASE, '/') . '/public/'; // assets sous /public/
+        
         extract($data);
         
-        // Inclure les partials et la vue
-        require_once '../app/views/partials/header.php';
-        require_once "../app/views/{$view}.php";
-        require_once '../app/views/partials/footer.php';
+        // Inclure les partials et la vue (chemins basés sur __DIR__)
+        require_once __DIR__ . '/../views/partials/header.php';
+        require_once __DIR__ . "/../views/{$view}.php";
+        require_once __DIR__ . '/../views/partials/footer.php';
     }
 }
 ?>

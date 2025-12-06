@@ -252,6 +252,12 @@
     <!-- Particules flottantes globales -->
     <div id="floating-particles"></div>
     
+    <!-- Injecter les bases pour les scripts JS -->
+    <script>
+        window.ASSETS_BASE = '<?php echo $base; ?>';
+        window.ROUTE_BASE = '<?php echo $route_base; ?>';
+    </script>
+    
     <script src="<?php echo $base; ?>js/countdown.js"></script>
     <script src="<?php echo $base; ?>js/countdown-form.js"></script>
 </body>
