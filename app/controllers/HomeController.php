@@ -52,11 +52,15 @@ class HomeController {
     
     public function countdown() {
         $data = [
-            'title' => 'Novalabz - Bientôt disponible'
+            'title' => 'Novalabz - Bientôt disponible',
+            'base' => rtrim(BASE, '/') . '/public/',
+            'route_base' => BASE
         ];
         
-        // Toujours accessible via render() pour injecter les bases correctement
-        $this->render('countdown', $data);
+        extract($data);
+        
+        require_once __DIR__ . '/../views/countdown.php';
+        exit;
     }
     
     private function isLaunched() {
