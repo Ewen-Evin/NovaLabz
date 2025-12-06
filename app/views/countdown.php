@@ -128,7 +128,7 @@
         
         <!-- Formulaire de contact pour clients -->
         <div class="client-contact">
-            <h3><i class="fas fa-handshake"></i> Devenir Partenaire</h3>
+            <h3><i class="fas fa-handshake"></i>Réserver votre projet</h3>
             <p>Vous avez un projet ambitieux ? Discutons de votre vision.</p>
             
             <form id="client-form">

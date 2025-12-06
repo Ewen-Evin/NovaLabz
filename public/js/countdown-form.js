@@ -44,16 +44,16 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.text())
             .then(data => {
                 if (data.includes('Succès')) {
-                    formMessage.innerHTML = '<i class="fas fa-check-circle"></i> Demande envoyée avec succès ! Nous vous répondrons sous 24h.';
+                    formMessage.innerHTML = '<i class="fas fa-check-circle"></i> Réservation confirmée ! Nous vous contacterons sous 24h pour planifier votre projet.';
                     formMessage.classList.add('success');
                     clientForm.reset();
                     
                     // Animation de succès
                     triggerConfetti();
                     
-                    // Message spécial pour les partenaires
+                    // Message spécial
                     setTimeout(() => {
-                        formMessage.innerHTML += '<br><br><small><i class="fas fa-rocket"></i> Merci pour votre intérêt pour NovaLabz !</small>';
+                        formMessage.innerHTML += '<br><br><small><i class="fas fa-rocket"></i> Votre place est réservée pour le 1er janvier 2026 !</small>';
                     }, 1000);
                 } else {
                     throw new Error(data);
