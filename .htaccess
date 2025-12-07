@@ -28,10 +28,10 @@ RewriteBase /
     AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript
 </IfModule>
 
-# Permettre l'accès direct aux fichiers statiques
+# Laisser passer les fichiers et dossiers existants
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Routes MVC - rediriger vers index.php pour tout le reste
-RewriteRule ^(.*)$ index.php [QSA,L]
+# MVC routing propre : renvoyer uniquement si nécessaire
+RewriteRule ^ index.php [QSA,L]
