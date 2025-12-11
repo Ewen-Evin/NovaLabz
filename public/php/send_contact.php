@@ -71,16 +71,19 @@ try {
     $mail->Port = $_ENV['MAIL_PORT'];
     
     // Expéditeur
-    $mail->setFrom($_ENV['MAIL_FROM'], 'NovaLabz Pré-lancement');
+    $mail->setFrom($_ENV['MAIL_FROM'], 'NovaLabz');
     
-    // Destinataire (ton email)
-    $mail->addAddress($_ENV['MAIL_TO']);
+    // Destinataire principal (contact@novalabz.fr)
+    $mail->addAddress('contact@novalabz.fr', 'NovaLabz');
+    
+    // Destinataire secondaire (ewenevin0@gmail.com) pour notification
+    $mail->addBCC('ewenevin0@gmail.com', 'Ewen Evin');
     
     // Répondre à → l'utilisateur
     $mail->addReplyTo($email, $name);
     
-    // Sujet amélioré
-    $subject = "🚀 Nouvelle réservation pré-lancement NovaLabz";
+    // Sujet amélioré (UTF-8 correct)
+    $subject = "Nouvelle demande de projet NovaLabz";
     if ($company) {
         $subject .= " - $company";
     } else {
@@ -92,7 +95,6 @@ try {
     $mail->isHTML(true);
     
     $currentDate = date('d/m/Y H:i:s');
-    $launchDate = '01/01/2026';
     
     $mail->Body = "
     <!DOCTYPE html>
@@ -115,14 +117,16 @@ try {
             .footer { margin-top: 40px; padding-top: 20px; border-top: 2px solid #7B54F7; font-size: 13px; color: #666; text-align: center; }
             .badge { display: inline-block; background: linear-gradient(135deg, #00D4FF 0%, #7B54F7 100%); color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-left: 10px; }
             .logo { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #FFFFFF 0%, #00D4FF 50%, #7B54F7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+            .priority-urgent { background: #dc3545; color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+            .priority-normal { background: #28a745; color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
         </style>
     </head>
     <body>
         <div class='container'>
             <div class='header'>
                 <div class='logo'>NOVALABZ</div>
-                <h1>🚀 Nouvelle Réservation Pré-lancement</h1>
-                <p>Projet réservé pour le lancement du 1er janvier 2026</p>
+                <h1>📋 Nouvelle Demande de Projet</h1>
+                <p>Reçue via le formulaire de contact</p>
             </div>
             
             <div class='content'>
@@ -160,14 +164,17 @@ try {
                         <div style='font-weight: 600; color: #3A2DCE; margin-bottom: 10px;'>📋 Action requise :</div>
                         <div>1. Répondre au client sous 24h maximum</div>
                         <div>2. Programmer un appel de découverte</div>
-                        <div>3. Préparer une proposition pour le 1er janvier 2026</div>
+                        <div>3. Préparer une proposition détaillée</div>
                     </div>
                 </div>
                 
                 <div class='footer'>
-                    <p>📧 Cet email a été généré automatiquement depuis le formulaire de pré-réservation NovaLabz</p>
-                    <p>🕐 Date de la demande : $currentDate | 🚀 Lancement prévu : $launchDate</p>
-                    <p>🔗 <a href='https://novalabz.fr' style='color: #7B54F7;'>novalabz.fr</a> | 📞 Priorité : <span class='badge'>" . ($deadline === 'urgent' ? 'URGENT' : 'Normal') . "</span></p>
+                    <p>📧 Cet email a été généré automatiquement depuis le formulaire de contact NovaLabz</p>
+                    <p>🕐 Date de la demande : $currentDate</p>
+                    <p>🔗 <a href='https://novalabz.fr' style='color: #7B54F7;'>novalabz.fr</a> | 📞 Priorité : " . 
+                    ($deadline === 'urgent' ? 
+                        '<span class="priority-urgent">URGENT</span>' : 
+                        '<span class="priority-normal">NORMAL</span>') . "</p>
                 </div>
             </div>
         </div>
@@ -176,7 +183,7 @@ try {
     ";
     
     // Version texte brut
-    $mail->AltBody = "🚀 NOUVELLE RÉSERVATION PRÉ-LANCEMENT NOVALABZ\n\n" .
+    $mail->AltBody = "📋 NOUVELLE DEMANDE DE PROJET NOVALABZ\n\n" .
                     "=== INFORMATIONS CLIENT ===\n" .
                     "Nom : $name\n" .
                     ($company ? "Entreprise : $company\n" : "") .
@@ -190,30 +197,29 @@ try {
                     "\n=== ACTION REQUISE ===\n" .
                     "1. Répondre au client sous 24h maximum\n" .
                     "2. Programmer un appel de découverte\n" .
-                    "3. Préparer une proposition pour le 1er janvier 2026\n" .
+                    "3. Préparer une proposition détaillée\n" .
                     "\n---\n" .
-                    "📧 Envoyé depuis le formulaire de pré-réservation NovaLabz\n" .
-                    "🕐 Date : $currentDate | 🚀 Lancement : 01/01/2026\n" .
+                    "📧 Envoyé depuis le formulaire de contact NovaLabz\n" .
+                    "🕐 Date : $currentDate\n" .
                     "🔗 Site : https://novalabz.fr\n" .
-                    "📞 Priorité : " . ($deadline === 'urgent' ? 'URGENT' : 'Normal');
+                    "📞 Priorité : " . ($deadline === 'urgent' ? 'URGENT' : 'NORMAL');
     
-    // Envoi de l'email
+    // Envoi de l'email principal
     $mail->send();
     
     // Envoi d'une confirmation à l'utilisateur
-    sendConfirmationEmail($email, $name, $company);
+    sendConfirmationEmail($email, $name, $company, $budget_display, $deadline_display, $project);
     
-    echo "Succès : Votre projet a été réservé avec succès ! Nous vous contacterons sous 24h pour planifier les détails.";
+    echo "Succès : Votre demande a été envoyée avec succès ! Nous vous contacterons sous 24h pour discuter de votre projet.";
     
 } catch (Exception $e) {
-    echo "Erreur : Impossible d'envoyer votre réservation. Veuillez nous contacter directement à contact@novalabz.fr";
+    echo "Erreur : Impossible d'envoyer votre demande. Veuillez nous contacter directement à contact@novalabz.fr";
     error_log("Erreur SMTP NovaLabz : " . $mail->ErrorInfo);
 }
 
 // Fonction pour envoyer une confirmation à l'utilisateur
-function sendConfirmationEmail($userEmail, $userName, $company = '') {
-    global $budget_display, $deadline_display;
-    
+function sendConfirmationEmail($userEmail, $userName, $company = '', $budget_display, $deadline_display, $project) {
+        
     $mail = new PHPMailer(true);
     
     try {
@@ -228,10 +234,13 @@ function sendConfirmationEmail($userEmail, $userName, $company = '') {
         $mail->setFrom($_ENV['MAIL_FROM'], 'NovaLabz');
         $mail->addAddress($userEmail, $userName);
         
-        $mail->Subject = "✅ Confirmation de votre réservation - NovaLabz";
+        // Sujet UTF-8 correct
+        $mail->Subject = "Confirmation de votre demande - NovaLabz";
+        
         $mail->isHTML(true);
         
         $companyText = $company ? " pour <strong>$company</strong>" : "";
+        $reference = 'REF: NL-' . strtoupper(substr(md5($userEmail . time()), 0, 8));
         
         $mail->Body = "
         <!DOCTYPE html>
@@ -249,28 +258,32 @@ function sendConfirmationEmail($userEmail, $userName, $company = '') {
                 .step { display: flex; align-items: flex-start; margin-bottom: 15px; }
                 .step-number { background: linear-gradient(135deg, #00D4FF 0%, #7B54F7 100%); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 15px; flex-shrink: 0; }
                 .footer { margin-top: 40px; font-size: 13px; color: #666; text-align: center; }
-                .reservation-code { background: linear-gradient(135deg, #00D4FF 0%, #7B54F7 100%); color: white; padding: 10px 20px; border-radius: 5px; font-family: monospace; font-size: 18px; letter-spacing: 2px; margin: 20px 0; }
+                .reservation-code { background: linear-gradient(135deg, #00D4FF 0%, #7B54F7 100%); color: white; padding: 10px 20px; border-radius: 5px; font-family: monospace; font-size: 18px; letter-spacing: 2px; margin: 20px 0; text-align: center; }
+                .summary { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
+                .summary-item { display: flex; justify-content: space-between; margin-bottom: 10px; }
+                .summary-label { font-weight: 600; color: #7B54F7; }
+                .summary-value { color: #333; }
             </style>
         </head>
         <body>
             <div class='container'>
                 <div class='header'>
                     <div class='logo'>NOVALABZ</div>
-                    <h1>✅ Réservation Confirmée !</h1>
-                    <p>Votre projet est maintenant dans notre file d'attente pour le 1er janvier 2026</p>
+                    <h1>✅ Demande Confirmée</h1>
+                    <p>Merci pour votre intérêt pour NovaLabz</p>
                 </div>
                 
                 <div class='content'>
                     <p>Bonjour <strong>$userName</strong>$companyText,</p>
                     
-                    <p>Félicitations ! Votre réservation a été enregistrée avec succès dans notre système de pré-lancement.</p>
+                    <p>Votre demande a bien été reçue et est maintenant enregistrée dans notre système.</p>
                     
                     <div class='reservation-code'>
-                        REF: NL-" . strtoupper(substr(md5($userEmail . time()), 0, 8)) . "
+                        $reference
                     </div>
                     
                     <div class='highlight'>
-                        <p><strong>🎯 Prochaine étape :</strong></p>
+                        <p><strong>📋 Prochaine étape :</strong></p>
                         <p>Notre équipe vous contactera dans les <strong>24 heures ouvrables</strong> pour :</p>
                     </div>
                     
@@ -300,19 +313,33 @@ function sendConfirmationEmail($userEmail, $userName, $company = '') {
                         </div>
                     </div>
                     
-                    <p><strong>📋 Résumé de votre demande :</strong></p>
-                    <ul>
-                        <li>💰 Budget estimé : $budget_display</li>
-                        <li>📅 Délai souhaité : $deadline_display</li>
-                        <li>🚀 Début des travaux : À partir du 1er janvier 2026</li>
-                    </ul>
+                    <div class='summary'>
+                        <p><strong>Résumé de votre demande :</strong></p>
+                        <div class='summary-item'>
+                            <span class='summary-label'>Budget estimé :</span>
+                            <span class='summary-value'>$budget_display</span>
+                        </div>
+                        <div class='summary-item'>
+                            <span class='summary-label'>Délai souhaité :</span>
+                            <span class='summary-value'>$deadline_display</span>
+                        </div>
+                        <div class='summary-item'>
+                            <span class='summary-label'>Date de la demande :</span>
+                            <span class='summary-value'>" . date('d/m/Y H:i:s') . "</span>
+                        </div>
+                    </div>
+
+                    <div class='project-description'>
+                        <p><strong>💡 Description de votre projet :</strong></p>
+                        <div style='background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #00D4FF; margin-top: 10px;'>
+                            <p style='white-space: pre-wrap; line-height: 1.6; margin: 0; font-family: \"Inter\", sans-serif;'>" . nl2br(htmlspecialchars($project)) . "</p>
+                        </div>
+                    </div>
                     
-                    <p>En attendant notre retour, vous pouvez :</p>
-                    <ul>
-                        <li>👀 Suivre notre compte à rebours sur <a href='https://novalabz.fr'>novalabz.fr</a></li>
-                        <li>💡 Préparer des exemples et références pour votre projet</li>
-                        <li>📱 Nous suivre sur nos réseaux sociaux</li>
-                    </ul>
+                    <p>En attendant notre retour, vous pouvez visiter notre site pour en savoir plus sur nos services :</p>
+                    <p style='text-align: center; margin: 20px 0;'>
+                        <a href='https://novalabz.fr' style='display: inline-block; background: linear-gradient(135deg, #00D4FF 0%, #7B54F7 100%); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;'>Visiter NovaLabz.fr</a>
+                    </p>
                     
                     <p>À très vite,</p>
                     <p><strong>L'équipe NovaLabz</strong><br>
@@ -320,35 +347,36 @@ function sendConfirmationEmail($userEmail, $userName, $company = '') {
                 </div>
                 
                 <div class='footer'>
-                    <p>📧 Cet email de confirmation a été envoyé automatiquement suite à votre réservation</p>
-                    <p>🚀 <strong>Date de lancement officiel : 1er janvier 2026</strong></p>
-                    <p>© 2026 NovaLabz - Tous droits réservés</p>
+                    <p>📧 Cet email de confirmation a été envoyé automatiquement suite à votre demande</p>
+                    <p>© " . date('Y') . " NovaLabz - Tous droits réservés</p>
                 </div>
             </div>
         </body>
         </html>
         ";
         
-        $mail->AltBody = "✅ CONFIRMATION DE RÉSERVATION - NOVALABZ\n\n" .
-                        "Bonjour $userName,\n\n" .
-                        "Félicitations ! Votre réservation a été enregistrée avec succès.\n\n" .
-                        "📋 RÉSUMÉ DE VOTRE DEMANDE :\n" .
-                        "Budget estimé : $budget_display\n" .
-                        "Délai souhaité : $deadline_display\n" .
-                        "Référence : NL-" . strtoupper(substr(md5($userEmail . time()), 0, 8)) . "\n\n" .
-                        "🎯 PROCHAINE ÉTAPE :\n" .
-                        "Notre équipe vous contactera dans les 24 heures ouvrables pour :\n" .
-                        "1. Programmer un appel de découverte\n" .
-                        "2. Étudier votre projet en détail\n" .
-                        "3. Préparer votre proposition personnalisée\n\n" .
-                        "🚀 DÉBUT DES TRAVAUX : À partir du 1er janvier 2026\n\n" .
-                        "En attendant, suivez notre compte à rebours sur https://novalabz.fr\n\n" .
-                        "À très vite,\n" .
-                        "L'équipe NovaLabz\n" .
-                        "Exploring the Future of Web Creation\n\n" .
-                        "---\n" .
-                        "Cet email a été envoyé automatiquement suite à votre réservation\n" .
-                        "© 2026 NovaLabz - Tous droits réservés";
+        $mail->AltBody = "✅ CONFIRMATION DE DEMANDE - NOVALABZ\n\n" .
+                "Bonjour $userName,\n\n" .
+                "Votre demande a bien été reçue et est maintenant enregistrée dans notre système.\n\n" .
+                "📋 RÉSUMÉ DE VOTRE DEMANDE :\n" .
+                "Budget estimé : $budget_display\n" .
+                "Délai souhaité : $deadline_display\n" .
+                "Référence : $reference\n" .
+                "Date de la demande : " . date('d/m/Y H:i:s') . "\n\n" .
+                "💡 DESCRIPTION DE VOTRE PROJET :\n" .
+                "$project\n\n" .
+                "🎯 PROCHAINE ÉTAPE :\n" .
+                "Notre équipe vous contactera dans les 24 heures ouvrables pour :\n" .
+                "1. Programmer un appel de découverte\n" .
+                "2. Étudier votre projet en détail\n" .
+                "3. Préparer votre proposition personnalisée\n\n" .
+                "🌐 En attendant, visitez notre site : https://novalabz.fr\n\n" .
+                "À très vite,\n" .
+                "L'équipe NovaLabz\n" .
+                "Exploring the Future of Web Creation\n\n" .
+                "---\n" .
+                "Cet email a été envoyé automatiquement suite à votre demande\n" .
+                "© " . date('Y') . " NovaLabz - Tous droits réservés";
         
         $mail->send();
         
