@@ -134,58 +134,61 @@
         
         <!-- Formulaire de contact pour clients -->
         <div class="client-contact">
-            <h3><i class="fas fa-handshake"></i>Réserver votre projet</h3>
+            <h3><i class="fas fa-handshake"></i>Lancez votre projet avec Novalabz</h3>
             <p>Vous avez un projet ambitieux ? Discutons de votre vision.</p>
             
-            <form id="client-form">
+            <form id="client-form" method="POST" action="<?php echo $route_base; ?>send_contact.php">
+                <!-- Champ caché pour le type de formulaire -->
+                <input type="hidden" name="form_type" value="countdown_prelaunch">
+                
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="client-name">
+                        <label for="name">
                             <i class="fas fa-user"></i>
                             Nom complet
                         </label>
-                        <input type="text" id="client-name" placeholder="Votre nom" required>
+                        <input type="text" id="name" name="name" placeholder="Votre nom" required>
                     </div>
                     <div class="form-group">
-                        <label for="client-company">
+                        <label for="company">
                             <i class="fas fa-building"></i>
                             Entreprise
                         </label>
-                        <input type="text" id="client-company" placeholder="Nom de votre entreprise">
+                        <input type="text" id="company" name="company" placeholder="Nom de votre entreprise">
                     </div>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="client-email">
+                        <label for="email">
                             <i class="fas fa-envelope"></i>
                             Email professionnel
                         </label>
-                        <input type="email" id="client-email" placeholder="contact@votresentreprise.com" required>
+                        <input type="email" id="email" name="email" placeholder="contact@votresentreprise.com" required>
                     </div>
                     <div class="form-group">
-                        <label for="client-phone">
+                        <label for="phone">
                             <i class="fas fa-phone"></i>
                             Téléphone
                         </label>
-                        <input type="tel" id="client-phone" placeholder="+33 1 23 45 67 89">
+                        <input type="tel" id="phone" name="phone" placeholder="+33 1 23 45 67 89">
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="client-project">
+                    <label for="project">
                         <i class="fas fa-lightbulb"></i>
                         Votre projet
                     </label>
-                    <textarea id="client-project" placeholder="Décrivez votre projet, vos besoins et vos objectifs..." rows="4" required></textarea>
+                    <textarea id="project" name="project" placeholder="Décrivez votre projet, vos besoins et vos objectifs..." rows="4" required></textarea>
                 </div>
                 
                 <div class="form-group">
-                    <label for="client-budget">
+                    <label for="budget">
                         <i class="fas fa-euro-sign"></i>
                         Budget estimé
                     </label>
-                    <select id="client-budget">
+                    <select id="budget" name="budget">
                         <option value="">Sélectionnez une fourchette</option>
                         <option value="500-1k">500€ - 1 000€</option>
                         <option value="1-3k">1 000€ - 3 000€</option>
@@ -201,11 +204,11 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="client-deadline">
+                    <label for="deadline">
                         <i class="fas fa-calendar-alt"></i>
                         Délai souhaité
                     </label>
-                    <select id="client-deadline">
+                    <select id="deadline" name="deadline">
                         <option value="">Sélectionnez un délai</option>
                         <option value="urgent">Urgent (moins d'1 mois)</option>
                         <option value="1-3months">1-3 mois</option>
