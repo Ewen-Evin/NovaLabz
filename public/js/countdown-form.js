@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const formMessage = this.querySelector('.form-message') || createFormMessage();
             
             // Sauvegarde du texte original
-            const originalText = submitBtn.innerHTML;
             const originalBtnText = submitBtn.querySelector('span')?.textContent || 'Envoyer ma demande';
             
             // Change le texte du bouton pendant l'envoi
@@ -25,26 +24,31 @@ document.addEventListener('DOMContentLoaded', function() {
             // Récupération des données du formulaire
             const formData = new FormData();
             
-            // Ajoute les champs du formulaire
-            formData.append('name', document.getElementById('client-name').value);
-            formData.append('company', document.getElementById('client-company').value || '');
-            formData.append('email', document.getElementById('client-email').value);
-            formData.append('phone', document.getElementById('client-phone').value || '');
-            formData.append('project', document.getElementById('client-project').value);
-            formData.append('budget', document.getElementById('client-budget').value);
-            formData.append('deadline', document.getElementById('client-deadline').value);
-            formData.append('form_type', 'countdown_partner');
+            // CORRECTION : Utiliser les bons IDs (sans "client-" devant)
+            formData.append('name', document.getElementById('name').value);
+            formData.append('company', document.getElementById('company').value || '');
+            formData.append('email', document.getElementById('email').value);
+            formData.append('phone', document.getElementById('phone').value || '');
+            formData.append('project', document.getElementById('project').value);
+            formData.append('budget', document.getElementById('budget').value);
+            formData.append('deadline', document.getElementById('deadline').value);
+            // CORRECTION : Utiliser la valeur du champ caché
+            formData.append('form_type', document.querySelector('input[name="form_type"]').value);
+            
+            // CORRECTION : Utiliser l'URL directement depuis l'attribut action du formulaire
+            const formAction = clientForm.getAttribute('action');
             
             // Envoi des données via fetch
-            const assetsBase = (window.ASSETS_BASE !== undefined) ? window.ASSETS_BASE : '/public/';
-            fetch(assetsBase + 'php/send_contact.php', {
+            fetch(formAction, {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.text())
             .then(data => {
+                console.log("Réponse serveur:", data); // Pour debug
+                
                 if (data.includes('Succès')) {
-                    formMessage.innerHTML = '<i class="fas fa-check-circle"></i> Réservation confirmée ! Nous vous contacterons sous 24h pour planifier votre projet.';
+                    formMessage.innerHTML = '<i class="fas fa-check-circle"></i> Votre demande a été envoyée avec succès ! Nous vous contacterons sous 24h.';
                     formMessage.classList.add('success');
                     clientForm.reset();
                     
@@ -53,10 +57,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     // Message spécial
                     setTimeout(() => {
-                        formMessage.innerHTML += '<br><br><small><i class="fas fa-rocket"></i> Votre place est réservée pour le 1er janvier 2026 !</small>';
+                        formMessage.innerHTML += '<br><br><small><i class="fas fa-rocket"></i> Merci pour votre intérêt pour NovaLabz !</small>';
                     }, 1000);
                 } else {
-                    throw new Error(data);
+                    // Afficher l'erreur du serveur
+                    formMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + data;
+                    formMessage.classList.add('error');
                 }
             })
             .catch(error => {
@@ -87,6 +93,10 @@ document.addEventListener('DOMContentLoaded', function() {
         formMessage.style.borderRadius = '8px';
         formMessage.style.textAlign = 'center';
         formMessage.style.fontWeight = '500';
+        
+        // Ajoute des styles pour succès et erreur
+        formMessage.style.backgroundColor = '#f8f9fa';
+        formMessage.style.border = '1px solid #dee2e6';
         
         // Insère après le formulaire
         const formNote = clientForm.querySelector('.form-note');
