@@ -137,7 +137,7 @@
             <h3><i class="fas fa-handshake"></i>Lancez votre projet avec Novalabz</h3>
             <p>Vous avez un projet ambitieux ? Discutons de votre vision.</p>
             
-            <form id="client-form" method="POST" action="<?php echo $route_base; ?>send_contact.php">
+            <form id="client-form" method="POST" action="/public/php/send_contact.php">
                 <!-- Champ caché pour le type de formulaire -->
                 <input type="hidden" name="form_type" value="countdown_prelaunch">
                 
