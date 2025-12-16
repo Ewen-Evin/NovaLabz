@@ -220,6 +220,22 @@ class CountdownTimer {
         
         items.forEach((item, index) => {
             item.setAttribute('data-label', labels[index]);
+            
+            // Cacher le label texte sur mobile
+            const textLabel = item.querySelector('.countdown-label');
+            if (textLabel && window.innerWidth <= 768) {
+                textLabel.style.display = 'none';
+            }
+        });
+        
+        // Gérer le resize pour afficher/cacher les labels
+        window.addEventListener('resize', () => {
+            items.forEach((item) => {
+                const textLabel = item.querySelector('.countdown-label');
+                if (textLabel) {
+                    textLabel.style.display = window.innerWidth <= 768 ? 'none' : 'block';
+                }
+            });
         });
     }
     
