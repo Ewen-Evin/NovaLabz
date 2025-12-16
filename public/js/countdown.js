@@ -6,9 +6,14 @@ class StarsAnimation {
         this.stars = [];
         this.numberOfStars = 300;
         this.speed = 0.5;
+        this.isMobile = window.innerWidth <= 768;
         
         this.init();
-        this.animate();
+        if (!this.isMobile) {
+            this.animate();
+        } else {
+            this.drawStaticStars();
+        }
         this.handleResize();
     }
     
@@ -25,35 +30,56 @@ class StarsAnimation {
     }
     
     handleResize() {
+        const wasMobile = this.isMobile;
+        this.isMobile = window.innerWidth <= 768;
+        
         this.resizeCanvas();
         this.createStars();
+        
+        // Si on passe de mobile à desktop ou vice-versa
+        if (wasMobile !== this.isMobile) {
+            if (this.isMobile) {
+                // Passer en mode statique
+                this.drawStaticStars();
+            } else {
+                // Relancer l'animation
+                this.animate();
+            }
+        } else if (this.isMobile) {
+            // Redessiner les étoiles statiques après resize
+            this.drawStaticStars();
+        }
     }
     
     createStars() {
         this.stars = [];
-        for (let i = 0; i < this.numberOfStars; i++) {
+        const starCount = this.isMobile ? 150 : this.numberOfStars; // Moins d'étoiles sur mobile
+        
+        for (let i = 0; i < starCount; i++) {
             const size = Math.random();
             this.stars.push({
                 x: Math.random() * this.canvas.width,
                 y: Math.random() * this.canvas.height,
-                radius: size * 2 + 0.5, // Réduit la taille max
+                radius: size * 2 + 0.5,
                 speed: Math.random() * this.speed + 0.1,
-                opacity: size * 0.6 + 0.3, // Opacité réduite
+                opacity: size * 0.6 + 0.3,
                 twinkleSpeed: Math.random() * 0.05 + 0.01,
                 twinkleOffset: Math.random() * Math.PI * 2,
-                color: Math.random() > 0.8 ? '#00D4FF' : '#FFFFFF', // Moins de bleu
+                color: Math.random() > 0.8 ? '#00D4FF' : '#FFFFFF',
                 trail: [],
-                maxTrailLength: Math.floor(Math.random() * 5) + 3 // Longueur de traînée limitée
+                maxTrailLength: Math.floor(Math.random() * 5) + 3
             });
         }
     }
     
     animate() {
+        if (this.isMobile) return; // Ne pas animer sur mobile
+        
         requestAnimationFrame(() => this.animate());
         
         // Fond avec un léger dégradé pour effacer progressivement
         const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
-        gradient.addColorStop(0, 'rgba(10, 10, 21, 0.25)'); // Augmenté l'opacité pour effacer plus vite
+        gradient.addColorStop(0, 'rgba(10, 10, 21, 0.25)');
         gradient.addColorStop(1, 'rgba(10, 26, 74, 0.15)');
         
         this.ctx.fillStyle = gradient;
@@ -76,7 +102,7 @@ class StarsAnimation {
             if (star.y > this.canvas.height) {
                 star.y = 0;
                 star.x = Math.random() * this.canvas.width;
-                star.trail = []; // Réinitialiser la traînée
+                star.trail = [];
             }
             
             const twinkle = Math.sin(time * star.twinkleSpeed + star.twinkleOffset) * 0.4 + 0.6;
@@ -126,6 +152,41 @@ class StarsAnimation {
             }
             
             this.ctx.fillStyle = mainGradient;
+            this.ctx.fill();
+        });
+    }
+    
+    // Dessiner des étoiles statiques pour mobile
+    drawStaticStars() {
+        // Fond sombre
+        const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+        gradient.addColorStop(0, '#0A0A15');
+        gradient.addColorStop(1, '#0A1A4A');
+        
+        this.ctx.fillStyle = gradient;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Dessiner les étoiles fixes
+        this.stars.forEach(star => {
+            this.ctx.beginPath();
+            this.ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+            
+            const starGradient = this.ctx.createRadialGradient(
+                star.x, star.y, 0,
+                star.x, star.y, star.radius * 2
+            );
+            
+            if (star.color === '#00D4FF') {
+                starGradient.addColorStop(0, `rgba(0, 212, 255, ${star.opacity})`);
+                starGradient.addColorStop(0.7, `rgba(0, 212, 255, ${star.opacity * 0.3})`);
+                starGradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
+            } else {
+                starGradient.addColorStop(0, `rgba(255, 255, 255, ${star.opacity})`);
+                starGradient.addColorStop(0.7, `rgba(255, 255, 255, ${star.opacity * 0.3})`);
+                starGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            }
+            
+            this.ctx.fillStyle = starGradient;
             this.ctx.fill();
         });
     }
@@ -288,7 +349,9 @@ class ClientContactForm {
     constructor() {
         this.form = document.getElementById('client-form');
         
-        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        if (this.form) {
+            this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        }
     }
     
     handleSubmit(e) {
@@ -296,13 +359,13 @@ class ClientContactForm {
         
         // Validation des champs
         const formData = {
-            name: document.getElementById('client-name').value.trim(),
-            company: document.getElementById('client-company').value.trim(),
-            email: document.getElementById('client-email').value.trim(),
-            phone: document.getElementById('client-phone').value.trim(),
-            project: document.getElementById('client-project').value.trim(),
-            budget: document.getElementById('client-budget').value,
-            deadline: document.getElementById('client-deadline').value
+            name: document.getElementById('name').value.trim(),
+            company: document.getElementById('company').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            phone: document.getElementById('phone').value.trim(),
+            project: document.getElementById('project').value.trim(),
+            budget: document.getElementById('budget').value,
+            deadline: document.getElementById('deadline').value
         };
         
         // Validation basique
@@ -369,13 +432,17 @@ document.addEventListener('DOMContentLoaded', () => {
     new CountdownTimer();
     new ClientContactForm();
     
-    createFloatingParticles();
-    createOrbitalParticles();
+    // Désactiver les particules flottantes sur mobile
+    if (window.innerWidth > 768) {
+        createFloatingParticles();
+        createOrbitalParticles();
+    }
 });
 
 // Particules flottantes supplémentaires
 function createFloatingParticles() {
     const container = document.getElementById('floating-particles');
+    if (!container) return;
     
     for (let i = 0; i < 40; i++) {
         const particle = document.createElement('div');
