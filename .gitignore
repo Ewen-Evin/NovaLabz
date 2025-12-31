@@ -1,47 +1,31 @@
-# Ignorer TOUT sauf les fichiers spécifiés ci-dessous
-*
-!.gitignore
+# Dependencies
+/vendor/
+/node_modules/
 
-# Fichiers autorisés (ne PAS ignorer)
-!README.md
-!.htaccess
-!index.php
-!app/
-!app/controllers/
-!app/controllers/HomeController.php
-!app/views/
-!app/views/countdown.php
-!app/views/404.php
-!app/core/
-!app/core/Router.php
-!public/
-!public/css/
-!public/css/countdown.css
-!public/js/
-!public/js/countdown.js
-!public/js/countdown-form.js
-!public/php/
-!public/php/load_env.php
-!public/php/send_contact.php
-!public/index.php
-!index.php
-!public/img/
-!public/img/favicon.svg
-
-
-# Ignorer tous les autres fichiers dans ces dossiers
-app/views/*
-!app/views/countdown.php
-!app/views/404.php 
-app/views/partials/
-public/css/*
-!public/css/countdown.css
-public/js/*
-!public/js/countdown.js
-!public/js/countdown-form.js
-public/php/*
-!public/php/load_env.php
-!public/php/send_contact.php
-
-# Fichiers spécifiques à ignorer ABSOLUMENT
+# Environment
 .env
+.env.local
+
+# Logs
+*.log
+logs/
+
+# System
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Cache
+*.cache
+
+# Database
+*.sqlite
+*.sql
+
+config/
+tarifs.php

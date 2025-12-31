@@ -1,37 +1,68 @@
 <?php
-// Chargement des variables d'environnement (BASE dynamique, indépendant du nom du dossier)
-$scriptDir = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
-if ($scriptDir === '' || $scriptDir === '.') {
-    define('BASE', '/');
-} else {
-    define('BASE', $scriptDir . '/');
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
-// Front Controller - Point d'entrée unique
-require_once __DIR__ . '/core/Router.php';
-require_once __DIR__ . '/app/controllers/HomeController.php';
+$base = './public/';
+$route_base = '/';
 
-// Initialisation du routeur
-$router = new Router();
-
-// Routes protégées - rediriger vers countdown si date < 1er janvier 2026
 $currentDate = new DateTime();
-$launchDate = new DateTime('2026-01-01');
+$launchDate = new DateTime('2026-01-01 00:00:00');
 
-if ($currentDate >= $launchDate) {
-    // Après le lancement, toutes les routes sont accessibles
-    $router->add('/', 'HomeController@index');
-    $router->add('/services', 'HomeController@services');
-    $router->add('/projects', 'HomeController@projects');
-    $router->add('/contact', 'HomeController@contact');
+// Si on est avant le lancement, rediriger vers countdown
+if ($currentDate < $launchDate) {
+    // Page par défaut = countdown jusqu'au lancement
+    $page = $_GET['page'] ?? 'countdown';
 } else {
-    // Avant le lancement, rediriger toutes les routes vers countdown
-    $router->add('/', 'HomeController@countdown');
-    $router->add('/services', 'HomeController@countdown');
-    $router->add('/projects', 'HomeController@countdown');
-    $router->add('/contact', 'HomeController@countdown');
+    // Page par défaut = accueil
+    $page = $_GET['page'] ?? 'accueil';
 }
 
-// Dispatch la requête
-$router->dispatch($_SERVER['REQUEST_URI']);
-?>
+switch ($page) {
+    case 'countdown':
+        require 'app/views/countdown.php';
+        break;
+
+    case 'accueil':
+        require 'app/views/accueil.php';
+        break;
+
+    case 'contact':
+        require 'app/views/contact.php';
+        break;
+
+    case 'mentions':
+        require 'app/views/mentions.php';
+        break;
+
+    case 'privacy':
+        require 'app/views/privacy.php';
+        break;
+
+    case 'cgv':
+        require 'app/views/cgv.php';
+        break;
+
+    case 'traiter-contact':
+        require 'app/controllers/ContactController.php';
+        $controller = new ContactController();
+        $controller->traiter();
+        break;
+
+    case 'tarifs':
+        //require 'app/views/tarifs.php';
+        require 'app/views/tarifs_later.php';
+        break;
+
+    case 'portfolio':
+        require 'app/views/portfolio.php';
+        break;
+
+    case 'apropos':
+        require 'app/views/apropos.php';
+        break;
+
+    default:
+        require 'app/views/accueil.php';
+        break;
+}

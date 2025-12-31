@@ -1,37 +1,37 @@
 RewriteEngine On
-RewriteBase /
 
-# Protection des fichiers sensibles
-<FilesMatch "^\.">
-    Order allow,deny
+# Custom 404 page
+ErrorDocument 404 /index.php?page=404
+# Permet d'accéder à /404 directement
+RewriteRule ^404$ index.php?page=404 [QSA,L]
+
+# Rediriger vers index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?page=$1 [QSA,L]
+
+# Protéger les répertoires sensibles
+Options -Indexes
+
+# Sécurité de base
+<FilesMatch "\.(env|log|ini|htaccess|htpasswd|sql)$">
+    Order Allow,Deny
     Deny from all
 </FilesMatch>
 
-<Files .env>
-    Order allow,deny
-    Deny from all
-</Files>
+# Compression GZIP
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript
+</IfModule>
 
-# Cache pour les fichiers statiques
+# Cache des assets
 <IfModule mod_expires.c>
     ExpiresActive On
     ExpiresByType image/jpg "access plus 1 year"
     ExpiresByType image/jpeg "access plus 1 year"
     ExpiresByType image/gif "access plus 1 year"
     ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
     ExpiresByType text/css "access plus 1 month"
     ExpiresByType application/javascript "access plus 1 month"
 </IfModule>
-
-# Compression GZIP
-<IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript
-</IfModule>
-
-# Laisser passer les fichiers et dossiers existants
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^ - [L]
-
-# MVC routing propre : renvoyer uniquement si nécessaire
-RewriteRule ^ index.php [QSA,L]
