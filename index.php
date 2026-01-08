@@ -6,23 +6,10 @@ if (session_status() === PHP_SESSION_NONE) {
 $base = './public/';
 $route_base = '/';
 
-$currentDate = new DateTime();
-$launchDate = new DateTime('2026-01-01 00:00:00');
 
-// Si on est avant le lancement, rediriger vers countdown
-if ($currentDate < $launchDate) {
-    // Page par défaut = countdown jusqu'au lancement
-    $page = $_GET['page'] ?? 'countdown';
-} else {
-    // Page par défaut = accueil
-    $page = $_GET['page'] ?? 'accueil';
-}
+$page = $_GET['page'] ?? 'accueil';
 
 switch ($page) {
-    case 'countdown':
-        require 'app/views/countdown.php';
-        break;
-
     case 'accueil':
         require 'app/views/accueil.php';
         break;
@@ -54,9 +41,11 @@ switch ($page) {
         require 'app/views/tarifs_later.php';
         break;
 
+    /*
     case 'portfolio':
         require 'app/views/portfolio.php';
         break;
+        */
 
     case 'apropos':
         require 'app/views/apropos.php';
