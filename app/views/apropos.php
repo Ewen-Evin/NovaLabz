@@ -119,6 +119,7 @@ include "app/views/header.php";
                     </div>
 
                     <div class="member-social">
+                        <a href="https://ewenevin.fr" target="_blank" rel="noopener"><i class="fas fa-globe"></i></a>
                         <a href="https://github.com/Ewen-Evin" target="_blank"><i class="fab fa-github"></i></a>
                         <a href="http://linkedin.com/in/ewen-evin/" target="_blank"><i class="fab fa-linkedin"></i></a>
                         <a href="https://www.tiktok.com/@novalabz.fr" target="_blank"><i class="fab fa-tiktok"></i></a>

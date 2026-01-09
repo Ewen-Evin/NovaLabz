@@ -1,5 +1,8 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 class ContactController {
     
     public function traiter() {
@@ -11,9 +14,6 @@ class ContactController {
         
         // Charger PHPMailer et la configuration
         require __DIR__ . '/../../public/php/load_env.php';
-        
-        use PHPMailer\PHPMailer\PHPMailer;
-        use PHPMailer\PHPMailer\Exception;
         
         require __DIR__ . '/../../vendor/autoload.php';
         
@@ -258,8 +258,8 @@ class ContactController {
     }
     
     private function sendConfirmationEmail($userEmail, $userName, $company, $budget, $deadline, $project) {
-        use PHPMailer\PHPMailer\PHPMailer;
-        use PHPMailer\PHPMailer\Exception;
+        // SUPPRIMER les lignes avec "use" ici (lignes 186-187 dans votre fichier)
+        // Les use doivent uniquement être en haut du fichier
         
         $mail = new PHPMailer(true);
         $mail->CharSet = 'UTF-8';
