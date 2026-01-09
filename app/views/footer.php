@@ -25,27 +25,26 @@
                     --->
                     <img src="<?php echo $base; ?>img/logo_novalabz_blanc_long.png" alt="Logo NovaLabz" class="logo-image">
                 </div>
-
                 <p class="footer-tagline">Exploring the Future of Web Creation</p>
             </div>
             
             <div class="footer-section">
                 <h3>Navigation</h3>
                 <ul class="footer-links">
-                    <li><a href="index.php?page=accueil">Accueil</a></li>
-                    <li><a href="index.php?page=tarifs">Tarifs</a></li>
-                    <!-- <li><a href="index.php?page=portfolio">Portfolio</a></li> -->
-                    <li><a href="index.php?page=apropos">À Propos</a></li>
-                    <li><a href="index.php?page=contact">Contact</a></li>
+                    <li><a href="/">Accueil</a></li>
+                    <li><a href="/tarifs">Tarifs</a></li>
+                    <!-- <li><a href="/portfolio">Portfolio</a></li> -->
+                    <li><a href="/apropos">À Propos</a></li>
+                    <li><a href="/contact">Contact</a></li>
                 </ul>
             </div>
             
             <div class="footer-section">
                 <h3>Légal</h3>
                 <ul class="footer-links">
-                    <li><a href="index.php?page=mentions">Mentions légales</a></li>
-                    <li><a href="index.php?page=privacy">Politique de confidentialité</a></li>
-                    <li><a href="index.php?page=cgv">CGV</a></li>
+                    <li><a href="/mentions">Mentions légales</a></li>
+                    <li><a href="/privacy">Politique de confidentialité</a></li>
+                    <li><a href="/cgv">CGV</a></li>
                 </ul>
             </div>
             
