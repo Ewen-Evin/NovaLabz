@@ -288,9 +288,9 @@ class ContactForm {
         submitBtn.disabled = true;
         
         if (formMessage) {
-            formMessage.style.display = 'block';
+            formMessage.style.display = 'none';
             formMessage.className = 'form-message';
-            formMessage.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+            formMessage.innerHTML = '';
         }
         
         const formData = new FormData(this.form);
@@ -308,20 +308,18 @@ class ContactForm {
                     formMessage.innerHTML = '<i class="fas fa-check-circle"></i> Votre demande a été envoyée avec succès ! Nous vous contacterons sous 24h.';
                     formMessage.classList.add('success');
                     this.form.reset();
-                    
-                    setTimeout(() => {
-                        formMessage.innerHTML += '<br><br><small><i class="fas fa-rocket"></i> Merci pour votre intérêt pour NovaLabz !</small>';
-                    }, 1000);
                 } else {
                     formMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + data;
                     formMessage.classList.add('error');
                 }
+                formMessage.style.display = 'block';
             }
         })
         .catch(error => {
             if (formMessage) {
                 formMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> Une erreur s\'est produite. Veuillez réessayer ou nous contacter directement à contact@novalabz.fr';
                 formMessage.classList.add('error');
+                formMessage.style.display = 'block';
             }
             console.error('Erreur:', error);
         })
