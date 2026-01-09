@@ -127,7 +127,6 @@ include "app/views/header.php";
                         </div>
                     </div>
                     
-                    <div class="form-message" style="display: none;"></div>
                     
                     <button type="submit" class="submit-btn">
                         <span>Envoyer ma demande</span>
